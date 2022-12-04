@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import { useState } from 'react'
 import './App.css';
+import {storage} from './firebase'
+import {ref} from './firebase/storage'
+import {v4} from 'uuid';
 
 function App() {
+  const [uploadedImg, uploadImg] = useState(null)
+  const uploadServ = () => {
+    if (uploadedImg === null) {
+      alert('Please Upload any image')
+      return
+    }
+    const imageRef = ref(storage, `./images/${uploadedImg.name+v4}`)
+    
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <a href='#'>
+        Create your Poster
+      </a>
+      <div className='img-upload'>
+        <label>Upload</label>
+        <input type='file' onChange={(e) => uploadImg(e.target.files[0])} />
+        <button onClick={uploadServ}>upload</button>
+      </div>
     </div>
   );
 }
