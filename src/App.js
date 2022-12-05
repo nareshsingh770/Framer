@@ -1,31 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css';
-import {storage} from './firebase'
-import {ref} from './firebase/storage'
-import {v4} from 'uuid';
+import Canvas from './components/Canvas';
+
 
 function App() {
-  const [uploadedImg, uploadImg] = useState(null)
-  const uploadServ = () => {
-    if (uploadedImg === null) {
-      alert('Please Upload any image')
-      return
+  const [uploadedImg, setUpload] = useState(null)
+
+  const uploadImg = (img) => {
+
+    let reader = new FileReader();
+    reader.onloadend = function () {
+      //console.log(reader.result)
+      setUpload(reader.result)
     }
-    const imageRef = ref(storage, `./images/${uploadedImg.name+v4}`)
-    
+    reader.readAsDataURL(img);
+
+
   }
+
   return (
     <div className="App">
-      <a href='#'>
-        Create your Poster
-      </a>
+      {
+        uploadedImg && <Canvas idname='uploaded-img' base={uploadedImg} width='600' height='300' />
+      }
       <div className='img-upload'>
         <label>Upload</label>
         <input type='file' onChange={(e) => uploadImg(e.target.files[0])} />
-        <button onClick={uploadServ}>upload</button>
+        <button >upload</button>
       </div>
-    </div>
+    </div >
   );
 }
+
 
 export default App;
