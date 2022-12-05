@@ -1,5 +1,6 @@
 {
   "name": "my-app",
+  "homepage": "https://nareshsingh770.github.io/Framer",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
