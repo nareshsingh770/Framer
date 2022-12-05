@@ -3,25 +3,42 @@ import React, { useEffect } from 'react'
 const Canvas = (props) => {
     useEffect(() => {
         const canvas = document.getElementById(props.idname)
-        console.log('canvas child')
+        const aspectRatio = 0.70;
+        const cols = 4;
+        //console.log('canvas child')
         const ctx = canvas.getContext('2d');
         const imgObj = new Image()
         imgObj.src = props.base
         imgObj.onload = function () {
             let w = canvas.width;
-            let nw = imgObj.naturalWidth;   //1350
-            let nh = imgObj.naturalHeight;  //900
-            let aspect = nw / nh;
-            let h = w / aspect;
-            canvas.height = h;
-            ctx.fillStyle = "blue";
-            ctx.fillRect(0, 0, 300, 300)
-            ctx.fillStyle = "#ddd";
-            ctx.drawImage(imgObj, 0, 0, 200, 200, 0, 0, 200, 200)
-            ctx.fillRect(300, 0, 300, 300)
-            ctx.drawImage(imgObj, 200, 0, 200, 200, 200, 0, 200, 200)
+            let nw = imgObj.naturalWidth;
+            let nh = imgObj.naturalHeight;
+            let pageWidth = w / cols;
+            let pageHeight = pageWidth / aspectRatio
+            let imgWidth = nw / cols;
+            let imgHeight = imgWidth / aspectRatio
+            let numRows = Math.ceil(nh / imgHeight)
+
+            // console.log('Page width/height', pageHeight, pageWidth)
+            // console.log('image width/height', imgWidth, imgHeight)
+            // console.log('image natural width/height', nw, nh)
+            // console.log('rows', numRows)
+
+            for (let r = 0; r < numRows; r++) {
+                for (let i = 0; i < cols; i++) {
+                    ctx.fillStyle = "#fff";
+                    ctx.fillRect(pageWidth * i, pageHeight * r, pageWidth, pageHeight)
+                    ctx.drawImage(imgObj, imgWidth * i, imgHeight * r, imgWidth, imgHeight, pageWidth * i, pageHeight * r, pageWidth, pageHeight)
+                    ctx.fstrokeStyle = "#000";
+                    ctx.strokeRect(pageWidth * i, pageHeight * r, pageWidth, pageHeight);
+                }
+            }
+
+
+            // ctx.drawImage(imgObj, 0, 0, 200, 200, 0, 0, 200, 200)
+            // ctx.drawImage(imgObj, 200, 0, 200, 200, 200, 0, 200, 200)
         }
-    }, []);
+    });
 
     return (
         <>
