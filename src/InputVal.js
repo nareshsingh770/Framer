@@ -9,12 +9,12 @@ const InputVal = () => {
                     <div className='col-12'>
                         <h6 className='text-start'>Paper Setting</h6>
                     </div>
-                    <div className='col-md-6'>
+                    <div className='col-md-6 pt-3'>
                         <select class="form-select">
                             <option>A4 Size</option>
                         </select>
                     </div>
-                    <div className='col-md-6'>
+                    <div className='col-md-6 pt-3'>
                         <select class="form-select">
                             <option>Portrait</option>
                             <option>Landscape</option>
@@ -25,10 +25,10 @@ const InputVal = () => {
                     <div className='col-12'>
                         <h6 className='text-start'>Output size</h6>
                     </div>
-                    <div className='col-md-6'>
+                    <div className='col-md-6 pt-3'>
                         <input type="number" class="form-control" value='4' />
                     </div>
-                    <div className='col-md-6'>
+                    <div className='col-md-6 pt-3'>
                         <select class="form-select">
                             <option>Portrait</option>
                             <option>Landscape</option>
