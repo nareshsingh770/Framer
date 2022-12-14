@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { memo } from 'react'
 
-const InputVal = () => {
+const InputVal = (props) => {
+
     return (
         <div>
             <h3>Paper and size</h3>
@@ -10,14 +11,14 @@ const InputVal = () => {
                         <h6 className='text-start'>Paper Setting</h6>
                     </div>
                     <div className='col-md-6 pt-3'>
-                        <select class="form-select">
+                        <select className="form-select">
                             <option>A4 Size</option>
                         </select>
                     </div>
                     <div className='col-md-6 pt-3'>
-                        <select class="form-select">
-                            <option>Portrait</option>
-                            <option>Landscape</option>
+                        <select className="form-select" value={props.setting.ratio} name='ratio' onChange={(e) => props.applied(e)}>
+                            <option value='p'>Portrait</option>
+                            <option value='l'>Landscape</option>
                         </select>
                     </div>
                 </div>
@@ -26,18 +27,13 @@ const InputVal = () => {
                         <h6 className='text-start'>Output size</h6>
                     </div>
                     <div className='col-md-6 pt-3'>
-                        <input type="number" class="form-control" value='4' />
+                        <input type="number" name='cols' className="form-control" onChange={(e) => { props.applied(e) }} value={props.setting.cols} />
                     </div>
-                    <div className='col-md-6 pt-3'>
-                        <select class="form-select">
-                            <option>Portrait</option>
-                            <option>Landscape</option>
-                        </select>
-                    </div>
+
                 </div>
                 <div className='container'>
                     <div className='row justify-content-end mt-4'>
-                        <button className='btn btn-success col-5'>Continue</button>
+                        <button className='btn btn-success col-5' onClick={() => { props.downloadPdf() }}>Download</button>
                     </div>
                 </div>
             </div>
@@ -45,4 +41,4 @@ const InputVal = () => {
     )
 }
 
-export default InputVal
+export default memo(InputVal)

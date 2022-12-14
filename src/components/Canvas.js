@@ -1,13 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo, forwardRef, useImperativeHandle } from 'react';
 import { jsPDF } from 'jspdf'
 
-const Canvas = (props) => {
-    useEffect(() => {
+const Canvas = (props, ref) => {
+    const imgDataList = []
+
+    const generateCanva = () => {
         const canvas = document.getElementById(props.idname)
-        const aspectRatio = 0.70;
-        const cols = 4;
+        console.log("Child rendered")
+        // canvas.width = window.innerWidth;
+        let aspectRatio;
+        const ratio = props.setting.ratio
+        ratio === 'l' ? aspectRatio = 1.41 : aspectRatio = 0.70
+        const cols = props.setting.cols;
         //console.log('canvas child')
         const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
         const imgObj = new Image()
         imgObj.src = props.base
         imgObj.onload = function () {
@@ -27,8 +34,6 @@ const Canvas = (props) => {
             // console.log('rows', numRows)
             ctx.drawImage(imgObj, 0, 0, nw, nh, 0, 0, w, w / imgAR)
 
-            let imgDataList = []
-
             for (let r = 0; r < numRows; r++) {
                 for (let i = 0; i < cols; i++) {
                     var imgData = ctx.getImageData(pageWidth * i, pageHeight * r, pageWidth, pageHeight);
@@ -46,8 +51,28 @@ const Canvas = (props) => {
                     count++;
                 }
             }
+        }
+    }
 
-            const doc = new jsPDF("p", "mm", "a4");
+    // const printPDF = () => {
+    //     const doc = new jsPDF(props.setting.ratio, "mm", "a4");
+    //     const width = doc.internal.pageSize.getWidth();
+    //     const height = doc.internal.pageSize.getHeight();
+    //     imgDataList.forEach(val => {
+    //         doc.addImage(val, 'JPEG', 0, 0, width, height)
+    //         doc.addPage()
+    //     })
+    //     doc.text(width / 2 - 50, height / 2, 'Thanks for using Framer App')
+    //     doc.save("framer_generated.pdf");
+    // }
+
+    useEffect(() => {
+        generateCanva();
+    });
+
+    useImperativeHandle(ref, () => {
+        function pdfDownload() {
+            const doc = new jsPDF(props.setting.ratio, "mm", "a4");
             const width = doc.internal.pageSize.getWidth();
             const height = doc.internal.pageSize.getHeight();
             imgDataList.forEach(val => {
@@ -55,10 +80,10 @@ const Canvas = (props) => {
                 doc.addPage()
             })
             doc.text(width / 2 - 50, height / 2, 'Thanks for using Framer App')
-            doc.save("a4.pdf");
+            doc.save("framer_generated.pdf");
         }
-    });
-
+        return pdfDownload
+    })
     return (
         <>
             <canvas width={props.width} height={props.height} id={props.idname} />
@@ -66,4 +91,4 @@ const Canvas = (props) => {
     )
 }
 
-export default Canvas
+export default memo(forwardRef(Canvas))
